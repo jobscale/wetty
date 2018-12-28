@@ -13,7 +13,9 @@ logs
 results
 
 npm-debug.log
-package-lock.json
-.idea
-node_modules/
+node_modules/*
 .esm-cache
+src
+*.yml
+Dockerfile
+*.png
