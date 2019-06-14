@@ -2,15 +2,15 @@
   "name": "wetty.js",
   "version": "1.1.4",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
-  "homepage": "https://github.com/krishnasrinivas/wetty",
+  "homepage": "https://github.com/stevebogar/wetty",
   "repository": {
     "type": "git",
-    "url": "git://github.com/krishnasrinivas/wetty.git"
+    "url": "git://github.com/stevebogar/wetty.git"
   },
   "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/krishnasrinivas/wetty/issues"
+    "url": "https://github.com/stevebogar/wetty/issues"
   },
   "main": "index.js",
   "scripts": {
@@ -125,6 +125,7 @@
     "Strubbl <github@linux4tw.de>",
     "koushikmln <mln02koushik@gmail.com>",
     "mirtouf <mirtouf@gmail.com>",
-    "nosemeocurrenada <nosemeocurrenada93@gmail.com>"
+    "nosemeocurrenada <nosemeocurrenada93@gmail.com>",
+    "Steven Bogar <stevebogar@hotmail.com>"
   ]
 }
