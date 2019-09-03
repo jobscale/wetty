@@ -17,6 +17,7 @@
     "lint": "eslint --ext .js,.ts .",
     "build": "babel-node node_modules/.bin/webpack",
     "start": "node .",
+    "tls": "node . --sslkey tls/wildcard.jsx.jp.key --sslcert tls/wildcard.jsx.jp.cert",
     "dev": "NODE_ENV=development concurrently --kill-others --success first \"babel-node node_modules/.bin/webpack --watch\" \"nodemon .\"",
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
