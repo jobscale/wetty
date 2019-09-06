@@ -1,11 +1,12 @@
-FROM jobscale/node:bionic
+FROM jobscale/node
 
-COPY . .
+RUN apt-get update && apt-get install -y sudo openssh-server
 
-RUN apt update && apt install -y sudo openssh-server \
-&& adduser --disabled-password --gecos "" buster \
+RUN adduser --disabled-password --gecos "" buster \
 && echo buster:buster | chpasswd \
 && echo "buster ALL=(ALL:ALL) /usr/sbin/visudo" > /etc/sudoers.d/40-users
+
+COPY . .
 
 RUN . ssl-keygen
 
