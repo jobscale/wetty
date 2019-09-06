@@ -1,10 +1,10 @@
 FROM jobscale/node
 
-RUN apt-get update && apt-get install -y sudo openssh-server
+RUN apt-get update && apt-get install -y sudo openssh-server tmux
 
 RUN adduser --disabled-password --gecos "" buster \
-&& echo buster:buster | chpasswd \
-&& echo "buster ALL=(ALL:ALL) /usr/sbin/visudo" > /etc/sudoers.d/40-users
+ && echo buster:buster | chpasswd \
+ && echo "buster ALL=(ALL:ALL) /usr/sbin/visudo" > /etc/sudoers.d/40-users
 
 COPY . .
 
