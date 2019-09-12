@@ -1,5 +1,6 @@
 FROM node:lts-buster
 SHELL ["bash", "-c"]
+WORKDIR /root
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
