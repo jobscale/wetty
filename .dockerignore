@@ -5,3 +5,7 @@
 **/*.conf
 **/*.service
 Dockerfile
+.idea/
+.git/
+.dockerignore
+.gitignore
