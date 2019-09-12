@@ -12,21 +12,17 @@ variables:
 
 steps:
 - task: Docker@1
-  displayName: Login to ACR
+  displayName: 'Build an image'
   inputs:
-    command: login
-    acrContainerRegistry: $(u).azurecr.io/$(imageName)
-- task: Docker@2
-  displayName: Build and Push
+    azureSubscriptionEndpoint: 'master'
+    azureContainerRegistry: jsxjp.azurecr.io
+    dockerFile: Dockerfile
+    imageName: 'jsxjp.azurecr.io/wetty:$(Build.BuildId)'
+    useDefaultContext: false
+- task: Docker@1
+  displayName: 'Push an image'
   inputs:
-    command: buildAndPush
-    repository: $(u)/$(imageName)
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    doc() {
-      docker build . -t $(u).azurecr.io/$(imageName)
-      echo $(p) | docker login --password-stdin $(u).azurecr.io -u $(o)
-      docker push $(u).azurecr.io/$(imageName)
-      ./deploy $(u) $(imageName)
-    } && echo ok
-  displayName: 'Run a multi-line script'
+    azureSubscriptionEndpoint: 'master'
+    azureContainerRegistry: jsxjp.azurecr.io
+    command: 'Push an image'
+    imageName: 'jsxjp.azurecr.io/wetty:$(Build.BuildId)'
