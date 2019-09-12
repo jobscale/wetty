@@ -11,11 +11,11 @@ variables:
   p: secret
 
 steps:
-- task: Docker@2
+- task: Docker@1
   displayName: Login to ACR
   inputs:
     command: login
-    containerRegistry: dockerRegistryServiceConnection1
+    acrContainerRegistry: $(u).azurecr.io/$(imageName)
 - task: Docker@2
   displayName: Build and Push
   inputs:
