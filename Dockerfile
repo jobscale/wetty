@@ -12,4 +12,4 @@ RUN adduser --disabled-password --gecos "" buster \
 COPY . .
 RUN . ssl-keygen
 EXPOSE 3000
-CMD ["bash", "-c", "/etc/init.d/ssh start && npm run tls"]
+CMD ["bash", "-c", "/etc/init.d/ssh start && npm start"]
