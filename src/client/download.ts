@@ -3,7 +3,9 @@ import Toastify from 'toastify-js';
 
 export const FILE_BEGIN = '\u001b[5i';
 export const FILE_END = '\u001b[4i';
+/* eslint-disable import/no-mutable-exports */
 export let fileBuffer = [];
+/* eslint-enable import/no-mutable-exports */
 
 export function onCompleteFile() {
   let bufferCharacters = fileBuffer.join('');
