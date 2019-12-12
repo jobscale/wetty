@@ -8,8 +8,8 @@ export interface SSH {
 }
 
 export interface SSL {
-  key?: string;
-  cert?: string;
+  key: string;
+  cert: string;
 }
 
 export interface SSLBuffer {
@@ -20,6 +20,7 @@ export interface SSLBuffer {
 export interface Server {
   port: number;
   host: string;
+  title: string;
   base: string;
   bypasshelmet: boolean;
 }

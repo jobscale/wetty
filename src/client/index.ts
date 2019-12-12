@@ -1,86 +1,80 @@
 import { Terminal } from 'xterm';
-import { isUndefined } from 'lodash';
-import * as io from 'socket.io-client';
-import { fit } from 'xterm/lib/addons/fit/fit';
+import { isNull } from 'lodash';
+
+import { library, dom } from "@fortawesome/fontawesome-svg-core";
+import { faCogs } from "@fortawesome/free-solid-svg-icons/faCogs";
+import { socket } from './socket';
+import { overlay, terminal } from './elements';
+import { fileBuffer, onCompleteFile, FILE_BEGIN, FILE_END } from './download';
+import verifyPrompt from './verify';
+import disconnect from './disconnect';
+import mobileKeyboard from './mobile';
+import resize from './resize';
+import loadOptions from './options';
+import { copySelected, copyShortcut } from './copyToClipboard';
 import './wetty.scss';
 import './favicon.ico';
 
-const userRegex = new RegExp('ssh/[^/]+$');
-const trim = (str: string): string => str.replace(/\/*$/, '');
-const socketBase = trim(window.location.pathname).replace(userRegex, '');
-const socket = io(window.location.origin, {
-  path: `${trim(socketBase)}/socket.io`,
-});
+// Setup for fontawesome
+library.add(faCogs);
+dom.watch();
 
 socket.on('connect', () => {
   const term = new Terminal();
-  term.open(document.getElementById('terminal'));
-  const defaultOptions = { fontSize: 14 };
-  let options: any;
-  try {
-    if (localStorage.options === undefined) {
-      options = defaultOptions;
-    } else {
-      options = JSON.parse(localStorage.options);
-    }
-  } catch {
-    options = defaultOptions;
-  }
-  Object.keys(options).forEach(key => {
-    const value = options[key];
+  if (isNull(terminal)) return;
+  term.open(terminal);
+
+  const options = loadOptions();
+  Object.entries(options).forEach(([key, value]) => {
     term.setOption(key, value);
   });
   const code = JSON.stringify(options, null, 2);
   const editor = document.querySelector('#options .editor');
-  editor.value = code;
-  editor.addEventListener('keyup', e => {
-    try {
-      const updated = JSON.parse(editor.value);
-      const updatedCode = JSON.stringify(updated, null, 2);
-      editor.value = updatedCode;
-      editor.classList.remove('error');
-      localStorage.options = updatedCode;
-      Object.keys(updated).forEach(key => {
-        const value = updated[key];
-        term.setOption(key, value);
+  if (!isNull(editor)) {
+    editor.value = code;
+    editor.addEventListener('keyup', () => {
+      try {
+        const updated = JSON.parse(editor.value);
+        const updatedCode = JSON.stringify(updated, null, 2);
+        editor.value = updatedCode;
+        editor.classList.remove('error');
+        localStorage.options = updatedCode;
+        Object.keys(updated).forEach(key => {
+          const value = updated[key];
+          term.setOption(key, value);
+        });
+        resize(term)();
+      } catch {
+        // skip
+        editor.classList.add('error');
+      }
+    });
+    const toggle = document.querySelector('#options .toggler');
+    const optionsElem = document.getElementById('options');
+    if (!isNull(toggle) && !isNull(optionsElem)) {
+      toggle.addEventListener('click', e => {
+        optionsElem.classList.toggle('opened');
+        e.preventDefault();
       });
-      resize();
-    } catch {
-      // skip
-      editor.classList.add('error');
     }
-  });
-  document.getElementById('overlay').style.display = 'none';
-  document.querySelector('#options .toggler').addEventListener('click', e => {
-    document.getElementById('options').classList.toggle('opened');
-    e.preventDefault();
-  });
-  window.addEventListener('beforeunload', handler, false);
-  /*
-    term.scrollPort_.screen_.setAttribute('contenteditable', 'false');
-  */
-
-  term.attachCustomKeyEventHandler(e => {
-    // Ctrl + Shift + C
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
-      e.preventDefault();
-      document.execCommand('copy');
-      return false;
-    }
-    return true;
-  });
-
-  function resize(): void {
-    fit(term);
-    socket.emit('resize', { cols: term.cols, rows: term.rows });
   }
-  window.onresize = resize;
-  resize();
+  if (!isNull(overlay)) overlay.style.display = 'none';
+  window.addEventListener('beforeunload', verifyPrompt, false);
+
+  term.attachCustomKeyEventHandler(copyShortcut);
+
+  document.addEventListener(
+    'mouseup',
+    () => {
+      if (term.hasSelection()) copySelected(term.getSelection());
+    },
+    false
+  );
+
+  window.onresize = resize(term);
+  resize(term)();
   term.focus();
-
-  function kill(data: string): void {
-    disconnect(data);
-  }
+  mobileKeyboard();
 
   term.on('data', data => {
     socket.emit('input', data);
@@ -90,26 +84,39 @@ socket.on('connect', () => {
   });
   socket
     .on('data', (data: string) => {
-      term.write(data);
+      const indexOfFileBegin = data.indexOf(FILE_BEGIN);
+      const indexOfFileEnd = data.indexOf(FILE_END);
+
+      // If we've got the entire file in one chunk
+      if (indexOfFileBegin !== -1 && indexOfFileEnd !== -1) {
+        fileBuffer.push(data);
+        onCompleteFile();
+      }
+      // If we've found a beginning marker
+      else if (indexOfFileBegin !== -1) {
+        fileBuffer.push(data);
+      }
+      // If we've found an ending marker
+      else if (indexOfFileEnd !== -1) {
+        fileBuffer.push(data);
+        onCompleteFile();
+      }
+      // If we've found the continuation of a file
+      else if (fileBuffer.length > 0) {
+        fileBuffer.push(data);
+      }
+      // Just treat it as normal data
+      else {
+        term.write(data);
+      }
     })
     .on('login', () => {
       term.writeln('');
-      resize();
+      resize(term)();
     })
-    .on('logout', kill)
-    .on('disconnect', kill)
+    .on('logout', disconnect)
+    .on('disconnect', disconnect)
     .on('error', (err: string | null) => {
       if (err) disconnect(err);
     });
 });
-
-function disconnect(reason: string): void {
-  document.getElementById('overlay').style.display = 'block';
-  if (!isUndefined(reason)) document.getElementById('msg').innerHTML = reason;
-  window.removeEventListener('beforeunload', handler, false);
-}
-
-function handler(e: { returnValue: string }): string {
-  e.returnValue = 'Are you sure?';
-  return e.returnValue;
-}
