@@ -13,10 +13,8 @@ logs
 results
 
 npm-debug.log
-node_modules/
-package-lock.json
-.idea
+node_modules
 .esm-cache
-dist
-.idea
-tls/
+dist/
+.idea/
+.vscode/
