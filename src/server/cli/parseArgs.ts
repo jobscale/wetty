@@ -1,10 +1,10 @@
 import { isUndefined } from 'lodash';
+import { SSH, SSL, Server } from '../interfaces';
 import { Options } from './options';
-import { SSL, SSH, Server } from '../interfaces';
 
 export function unWrapArgs(
   args: Options
-): { ssh: SSH; server: Server; command?: string; ssl?: SSL } {
+): { ssh: SSH; server: Server; command?: string; forcessh?: boolean; ssl?: SSL } {
   return {
     ssh: {
       user: args.sshuser,
@@ -13,6 +13,7 @@ export function unWrapArgs(
       port: args.sshport,
       pass: args.sshpass,
       key: args.sshkey,
+      knownhosts: args.knownhosts,
     },
     server: {
       base: args.base,
@@ -22,6 +23,7 @@ export function unWrapArgs(
       bypasshelmet: args.bypasshelmet || false,
     },
     command: args.command,
+    forcessh: args.forcessh,
     ssl:
       isUndefined(args.sslkey) || isUndefined(args.sslcert)
         ? undefined

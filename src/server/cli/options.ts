@@ -5,6 +5,7 @@ export interface Options {
   sshauth: string;
   sshkey?: string;
   sshpass?: string;
+  knownhosts: string;
   sslkey?: string;
   sslcert?: string;
   base: string;
@@ -12,6 +13,7 @@ export interface Options {
   port: number;
   title: string;
   command?: string;
+  forcessh?: boolean;
   bypasshelmet?: boolean;
 }
 

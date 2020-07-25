@@ -4,9 +4,9 @@
  */
 import server from '../socketServer';
 import getCommand from '../command';
-import { spawn, login } from './term';
-import { logger, loadSSL } from '../utils';
-import { SSL, SSH, SSLBuffer, Server } from '../interfaces';
+import { login, spawn } from './term';
+import { loadSSL, logger } from '../utils';
+import { SSH, SSL, SSLBuffer, Server } from '../interfaces';
 
 /**
  * Starts WeTTy Server
@@ -22,6 +22,7 @@ export default function startWeTTy(
     bypasshelmet: false,
   },
   command = '',
+  forcessh = false,
   ssl?: SSL
 ): Promise<void> {
   return loadSSL(ssl).then((sslBuffer: SSLBuffer) => {
@@ -44,7 +45,7 @@ export default function startWeTTy(
        * @name connection
        */
       logger.info('Connection accepted.');
-      const { args, user: sshUser } = getCommand(socket, ssh, command);
+      const { args, user: sshUser } = getCommand(socket, ssh, command, forcessh);
       logger.debug('Command Generated', {
         user: sshUser,
         cmd: args.join(' '),

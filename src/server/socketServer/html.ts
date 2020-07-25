@@ -3,8 +3,11 @@ import * as express from 'express';
 export default (base: string, title: string) => (
   req: express.Request,
   res: express.Response
-): express.Response => {
-  const resourcePath = /^\/ssh\//.test(req.url.replace(base, '/')) ? '../' : '';
+): void => {
+  const resourcePath = /^\/ssh\//.test(req.url.replace(base, '/'))
+    ? '../'
+    : base;
+
   res.send(`<!doctype html>
 <html lang="en">
   <head>
