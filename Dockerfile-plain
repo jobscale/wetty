@@ -9,7 +9,7 @@ RUN adduser --disabled-password --gecos "" buster \
  && echo buster:buster | chpasswd \
  && echo "buster ALL=(ALL:ALL) /usr/sbin/visudo" > /etc/sudoers.d/40-users
 COPY . .
-RUN . ssl-keygen && npm i --production && npm run build
+RUN . ssl-keygen && npm i && npm run build
 RUN rm -fr /var/lib/apt/lists/*
 EXPOSE 3000
 CMD ["bash", "-c", "/etc/init.d/ssh start && npm start -- --sslkey tls/wildcard.jsx.jp.key --sslcert tls/wildcard.jsx.jp.cert"]
