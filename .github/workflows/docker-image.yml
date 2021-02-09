@@ -11,8 +11,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    container: ubuntu:20.04
 
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
+      run: lsb_release -a
       run: docker build . --file Dockerfile-plain --tag my-image-name:$(date +%s)
