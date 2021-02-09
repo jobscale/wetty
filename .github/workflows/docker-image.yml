@@ -17,4 +17,5 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build the Docker image
       run: lsb_release -a
+    - name: Build the Docker image
       run: docker build . --file Dockerfile-plain --tag my-image-name:$(date +%s)
