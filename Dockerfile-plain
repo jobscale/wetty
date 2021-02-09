@@ -1,7 +1,7 @@
 FROM node as builder
 WORKDIR /usr/src/app
 COPY . /usr/src/app
-RUN yarn && npm run build && rm -fr node_modules && npm i --production
+RUN npm i --legacy-peer-deps && npm run build && rm -fr node_modules && npm i --production
 
 FROM node:buster-slim
 SHELL ["bash", "-c"]
