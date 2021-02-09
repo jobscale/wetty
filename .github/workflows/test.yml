@@ -1,5 +1,9 @@
 ---
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 name: Run tests
 jobs:
@@ -11,7 +15,7 @@ jobs:
       - name: Setup env
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
       - run: yarn
         name: Install dependencies
       - name: ESLint checks

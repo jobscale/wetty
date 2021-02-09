@@ -2,9 +2,10 @@
 version: '3.5'
 services:
   wetty:
-    build: .
-    image: butlerx/wetty
-    container_name: wetty
+    image: wettyoss/wetty
+    build:
+      context: .
+      dockerfile: containers/wetty/Dockerfile
     tty: true
     working_dir: /usr/src/app
     ports:
@@ -13,13 +14,11 @@ services:
       SSHHOST: 'wetty-ssh'
       SSHPORT: 22
       NODE_ENV: 'development'
-    command: yarn start --sshhost redbrick.dcu.ie
 
   web:
     image: nginx
-    container_name: wetty-nginx
     volumes:
-      - ./bin/nginx.template:/etc/nginx/conf.d/wetty.template
+      - ./conf/nginx.template:/etc/nginx/conf.d/wetty.template
     ports:
       - '80:80'
     environment:
@@ -36,9 +35,8 @@ services:
   wetty-ssh:
     build:
       context: .
-      dockerfile: ssh.Dockerfile
-    image: butlerx/wetty:ssh
-    container_name: 'wetty-ssh'
+      dockerfile: containers/ssh/Dockerfile
+    image: wettyoss/wetty:ssh
 
 networks:
   default:

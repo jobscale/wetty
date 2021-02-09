@@ -1,27 +1,36 @@
-import { isUndefined } from 'lodash';
-import parseCommand from './parse';
-import logger from '../utils/logger';
+import isUndefined from 'lodash/isUndefined.js';
+import { logger } from '../../shared/logger.js';
 
-export default function sshOptions(
-  { pass, path, command, host, port, auth, knownhosts }: { [s: string]: string },
-  key?: string
+export function sshOptions(
+  {
+    pass,
+    path,
+    command,
+    host,
+    port,
+    auth,
+    knownHosts,
+    config,
+  }: Record<string, string>,
+  key?: string,
 ): string[] {
   const cmd = parseCommand(command, path);
-  const hostChecking = (knownhosts !== '/dev/null') ? 'yes' : 'no'
-  const sshRemoteOptsBase = [
-    'ssh',
-    host,
-    '-t',
+  const hostChecking = knownHosts !== '/dev/null' ? 'yes' : 'no';
+  logger.info(`Authentication Type: ${auth}`);
+  let sshRemoteOptsBase = ['ssh', host, '-t'];
+  if (config !== '') {
+    sshRemoteOptsBase = sshRemoteOptsBase.concat(['-F', config]);
+  }
+  sshRemoteOptsBase = sshRemoteOptsBase.concat([
     '-p',
     port,
     '-o',
     `PreferredAuthentications=${auth}`,
     '-o',
-    `UserKnownHostsFile=${knownhosts}`,
-    '-o', 
+    `UserKnownHostsFile=${knownHosts}`,
+    '-o',
     `StrictHostKeyChecking=${hostChecking}`,
-  ];
-  logger.info(`Authentication Type: ${auth}`);
+  ]);
   if (!isUndefined(key)) {
     return sshRemoteOptsBase.concat(['-i', key, cmd]);
   }
@@ -32,8 +41,12 @@ export default function sshOptions(
     sshRemoteOptsBase.splice(sshRemoteOptsBase.indexOf('-o'), 2);
   }
 
-  if (cmd === '') {
-    return sshRemoteOptsBase;
-  }
-  return sshRemoteOptsBase.concat([cmd]);
+  return cmd === '' ? sshRemoteOptsBase : sshRemoteOptsBase.concat([cmd]);
+}
+
+function parseCommand(command: string, path?: string): string {
+  if (command === 'login' && isUndefined(path)) return '';
+  return !isUndefined(path)
+    ? `$SHELL -c "cd ${path};${command === 'login' ? '$SHELL' : command}"`
+    : command;
 }

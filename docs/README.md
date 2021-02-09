@@ -2,6 +2,7 @@
 
 ![WeTTy](./terminal.png?raw=true)
 
+- [AtoZ](./atoz.md)
 - [Running as daemon](./service.md)
 - [HTTPS Support](./https.md)
   - [Using NGINX](./nginx.md)
@@ -20,15 +21,19 @@ WeTTy is event driven. To Spawn a new server call `wetty.start()` with no
 arguments.
 
 ```javascript
-const wetty = require('wetty.js');
+import { start } from 'wetty';
 
-wetty
-  .on('exit', ({ code, msg }) => {
-    console.log(`Exit with code: ${code} ${msg}`);
+start(/* server settings, see Options */)
+  .then((wetty) => {
+    console.log('server running');
+    wetty
+      .on('exit', ({ code, msg }) => {
+        console.log(`Exit with code: ${code} ${msg}`);
+      })
+      .on('spawn', (msg) => console.log(msg));
+    /* code you want to execute */
   })
-  .on('spawn', msg => console.log(msg));
-wetty.start(/* server settings, see Options */).then(() => {
-  console.log('server running');
-  /* code you want to execute */
-});
+  .catch((err) => {
+    console.error(err);
+  });
 ```
