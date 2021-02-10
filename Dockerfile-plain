@@ -1,11 +1,13 @@
 FROM node as builder
 WORKDIR /usr/src/app
+ENV NODE_ENV=production
 COPY . /usr/src/app
 RUN npm i --legacy-peer-deps && npm run build && rm -fr node_modules && npm i --production
 
 FROM node:buster-slim
 SHELL ["bash", "-c"]
 WORKDIR /usr/src/app
+ENV NODE_ENV=production
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update \
  && apt-get upgrade -y && apt-get install -y tzdata \
@@ -16,7 +18,6 @@ RUN adduser --disabled-password --gecos "" buster \
 COPY --from=builder /usr/src/app/build /usr/src/app/build
 COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
 COPY package.json /usr/src/app
-ENV NODE_ENV=production
 RUN rm -fr /var/lib/apt/lists/*
 EXPOSE 3000
-CMD ["bash", "-c", "/etc/init.d/ssh start && npm start -- --sslkey tls/wildcard.jsx.jp.key --sslcert tls/wildcard.jsx.jp.cert"]
+CMD ["bash", "-c", "/etc/init.d/ssh start && npm start"]
