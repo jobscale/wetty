@@ -19,5 +19,5 @@ COPY --from=builder /usr/src/app/build /usr/src/app/build
 COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
 COPY package.json /usr/src/app
 RUN rm -fr /var/lib/apt/lists/*
-EXPOSE 3000
+EXPOSE 80
 CMD ["bash", "-c", "/etc/init.d/ssh start && npm start"]
