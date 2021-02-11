@@ -1,6 +1,5 @@
 FROM node as builder
 WORKDIR /usr/src/app
-ENV NODE_ENV=production
 COPY . /usr/src/app
 RUN npm i --legacy-peer-deps && npm run build && rm -fr node_modules && npm i --production
 
