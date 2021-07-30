@@ -60,7 +60,7 @@
     ]
   },
   "snowpack": {
-    "installOptions": {
+    "packageOptions": {
       "sourceMap": true,
       "installTypes": true
     },
