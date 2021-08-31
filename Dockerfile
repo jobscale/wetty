@@ -1,4 +1,4 @@
-FROM node:buster as builder
+FROM node:lts-bullseye as builder
 WORKDIR /home/node
 COPY . .
 RUN chown -R node. .
@@ -6,7 +6,7 @@ USER node
 RUN rm -f package-lock.json yarn.lock \
  && npm i --legacy-peer-deps && npm run build && rm -fr node_modules && npm i --production
 
-FROM node:buster-slim
+FROM node:lts-bullseye-slim
 SHELL ["bash", "-c"]
 WORKDIR /home/node
 ENV NODE_ENV=production
