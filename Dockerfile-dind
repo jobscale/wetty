@@ -22,4 +22,5 @@ COPY package.json .
 EXPOSE 3000
 RUN curl -Ls git.io/susi | bash && usermod -aG docker bullseye
 RUN rm -fr /var/lib/apt/lists/*
+VOLUME /var/lib/docker
 CMD ["bash", "-c", "/etc/init.d/docker start && /etc/init.d/ssh start && npm start"]
