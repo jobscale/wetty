@@ -56,7 +56,8 @@ const opts = yargs
     type: 'string',
   })
   .option('ssh-config', {
-    description: 'Specifies an alternative ssh configuration file. For further details see "-F" option in ssh(1)',
+    description:
+      'Specifies an alternative ssh configuration file. For further details see "-F" option in ssh(1)',
     type: 'string',
   })
   .option('force-ssh', {
@@ -88,7 +89,7 @@ const opts = yargs
   })
   .option('allow-iframe', {
     description:
-      'Allow wetty to be embedded in an iframe, defaults to allowing same origin',
+      'Allow WeTTY to be embedded in an iframe, defaults to allowing same origin',
     type: 'boolean',
   })
   .option('help', {
