@@ -7,11 +7,18 @@
  * This is the cli Interface for wetty.
  */
 import yargs from 'yargs';
-import { logger } from './shared/logger.js';
+import { createRequire } from 'module';
+import { setLevel, logger } from './shared/logger.js';
 import { start } from './server.js';
 import { loadConfigFile, mergeCliConf } from './shared/config.js';
 
+/* eslint-disable @typescript-eslint/no-var-requires */
+const require = createRequire(import.meta.url);
+const packageJson = require('../package.json');
+
 const opts = yargs
+  .scriptName(packageJson.name)
+  .version(packageJson.version)
   .options('conf', {
     type: 'string',
     description: 'config file to load config from',
@@ -92,6 +99,15 @@ const opts = yargs
       'Allow WeTTY to be embedded in an iframe, defaults to allowing same origin',
     type: 'boolean',
   })
+  .option('allow-remote-hosts', {
+    description:
+      'Allow WeTTY to use the `host` param in a url as ssh destination',
+    type: 'boolean',
+  })
+  .option('log-level', {
+    description: 'set log level of wetty server',
+    type: 'string',
+  })
   .option('help', {
     alias: 'h',
     type: 'boolean',
@@ -102,11 +118,12 @@ const opts = yargs
 if (!opts.help) {
   loadConfigFile(opts.conf)
     .then(config => mergeCliConf(opts, config))
-    .then(conf =>
-      start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl),
-    )
+    .then(conf => {
+      setLevel(conf.logLevel);
+      start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl);
+    })
     .catch((err: Error) => {
-      logger.error(err);
+      logger().error('error in server', { err });
       process.exitCode = 1;
     });
 } else {

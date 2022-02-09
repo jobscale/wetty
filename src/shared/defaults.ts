@@ -1,4 +1,5 @@
 import type { SSH, Server } from './interfaces';
+import { isDev } from './env.js';
 
 export const sshDefault: SSH = {
   user: process.env.SSHUSER || '',
@@ -8,6 +9,7 @@ export const sshDefault: SSH = {
   key: process.env.SSHKEY || undefined,
   port: parseInt(process.env.SSHPORT || '22', 10),
   knownHosts: process.env.KNOWNHOSTS || '/dev/null',
+  allowRemoteHosts: false,
   config: process.env.SSHCONFIG || undefined,
 };
 
@@ -21,3 +23,4 @@ export const serverDefault: Server = {
 
 export const forceSSHDefault = process.env.FORCESSH === 'true' || false;
 export const defaultCommand = process.env.COMMAND || 'login';
+export const defaultLogLevel = isDev ? 'debug' : 'http';

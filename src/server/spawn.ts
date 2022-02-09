@@ -1,19 +1,22 @@
 import type SocketIO from 'socket.io';
 import isUndefined from 'lodash/isUndefined.js';
 import pty from 'node-pty';
-import { logger } from '../shared/logger.js';
+import { logger as getLogger } from '../shared/logger.js';
 import { xterm } from './shared/xterm.js';
+import { envVersion } from './spawn/env.js';
 
-export function spawn(socket: SocketIO.Socket, args: string[]): void {
-  const cmd = ['-S', ...args];
-  logger.debug('Spawning PTTY', { cmd });
+export async function spawn(
+  socket: SocketIO.Socket,
+  args: string[],
+): Promise<void> {
+  const logger = getLogger();
+  const version = await envVersion();
+  const cmd = version >= 9 ? ['-S', ...args] : args;
+  logger.debug('Spawning PTY', { cmd });
   const term = pty.spawn('/usr/bin/env', cmd, xterm);
   const { pid } = term;
   const address = args[0] === 'ssh' ? args[1] : 'localhost';
-  logger.info('Process Started on behalf of user', {
-    pid,
-    address,
-  });
+  logger.info('Process Started on behalf of user', { pid, address });
   socket.emit('login');
   term.on('exit', (code: number) => {
     logger.info('Process exited', { code, pid });
