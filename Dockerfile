@@ -1,12 +1,13 @@
-FROM node:bullseye as builder
+FROM node:lts-bullseye as builder
 WORKDIR /home/node
 COPY . .
 RUN chown -R node. .
 USER node
-RUN rm -f package-lock.json yarn.lock \
- && npm i --legacy-peer-deps && npm run build && rm -fr node_modules && npm i --production
+RUN npm version
+RUN npm ci --legacy-peer-deps && npm run build
+RUN rm -fr node_modules && npm i --production
 
-FROM node:bullseye-slim
+FROM node:lts-bullseye-slim
 SHELL ["bash", "-c"]
 WORKDIR /home/node
 ENV NODE_ENV=production
