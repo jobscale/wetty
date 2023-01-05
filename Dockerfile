@@ -7,7 +7,7 @@ RUN rm -fr node_modules package-lock.json yarn.lock \
  && npm i --legacy-peer-deps
 RUN npm run build
 RUN rm -fr node_modules package-lock.json yarn.lock \
- && npm i --production --legacy-peer-deps
+ && npm i --omit=dev --legacy-peer-deps
 
 FROM node:lts-bullseye-slim
 SHELL ["bash", "-c"]
