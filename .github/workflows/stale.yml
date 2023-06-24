@@ -10,9 +10,8 @@ jobs:
     permissions:
       issues: write
       pull-requests: write
-
     steps:
-      - uses: actions/stale@v6
+      - uses: actions/stale@v8
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-issue-message: 'Stale issue message'

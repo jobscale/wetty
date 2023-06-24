@@ -1,5 +1,5 @@
-import type { SSH, Server } from './interfaces';
 import { isDev } from './env.js';
+import type { SSH, Server } from './interfaces';
 
 export const sshDefault: SSH = {
   user: process.env.SSHUSER || '',
@@ -18,7 +18,7 @@ export const serverDefault: Server = {
   port: parseInt(process.env.PORT || '3000', 10),
   host: '0.0.0.0',
   title: process.env.TITLE || 'WeTTY - The Web Terminal Emulator',
-  allowIframe: false,
+  allowIframe: process.env.ALLOWIFRAME === 'true' || false,
 };
 
 export const forceSSHDefault = process.env.FORCESSH === 'true' || false;
