@@ -1,4 +1,4 @@
-FROM node:lts-bullseye as builder
+FROM node:lts-bookworm as builder
 WORKDIR /home/node
 COPY --chown=node:staff . .
 USER node
