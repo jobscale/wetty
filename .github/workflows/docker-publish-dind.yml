@@ -56,6 +56,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
+            v${{ github.run_number }}-dind
             type=raw,value=dind
 
       # Build and push Docker image with Buildx (don't push on PR)
