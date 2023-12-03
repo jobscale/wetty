@@ -14,14 +14,14 @@ to use them but they are not required to use WeTTY in general.
 
 ## Required dependencies
 
-`Node` - WeTTY requires node v14 or greater. We will install this locally for a
+`Node` - WeTTY requires node v20 or greater. We will install this locally for a
 non root user later in the guide.
 
 `python` - This should be installed by default but we will include it in our
 `apt-get` command to be safe.
 
 `build-essential` - We need this specifically for `node-gyp` to build packages
-when using `npm` or `yarn` to install packages.
+when using `npm` to install packages.
 
 As the `root` or `sudo` user run these commands:
 
@@ -79,11 +79,11 @@ This command will download and install `nvm` and reload our shell.
 curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash && source ~/.profile
 ```
 
-This command will install the latest version of the v14 branch, which is the
+This command will install the latest version of the v20 branch, which is the
 minimum required version for WeTTY.
 
 ```bash
-nvm install 14
+nvm install 20
 ```
 
 You can now call `node` to check it works using this command.
@@ -95,7 +95,7 @@ node -v
 Your result should look something like this.
 
 ```bash
-v14.16.1
+v20.2.0
 ```
 
 **Note:** There is an important consideration with the `nvm` method. `node` is
@@ -107,11 +107,11 @@ unavailable. The way we over come this issue for the needs of this guide is by
 using this command substitution to provide the full path, where applicable:
 
 ```bash
-$(source ~/.nvm/nvm.sh && nvm which 14)
+$(source ~/.nvm/nvm.sh && nvm which 20)
 ```
 
 **Why?** This command will always provide us with the path to the most current
-version of `node 14` installed via `nvm` regardless of other versions of `node`
+version of `node 20` installed via `nvm` regardless of other versions of `node`
 installed with `nvm`.
 
 ## Generate OpenSSL certificates
@@ -191,9 +191,9 @@ sed -r '/^ssh-ed25519(.*)wetty-keyfile$/d' -i ~/.ssh/authorized_keys
 
 ## Install WeTTY
 
-**Note:** we are using `-g` for `npm` or `global` for `yarn` along with
-`--prefix ~/` so that the application's symbolic link is installed to our
-`~/bin` directory and available in our local user's `PATH`.
+**Note:** we are using `-g` for `npm` along with `--prefix ~/` so that the
+application's symbolic link is installed to our `~/bin` directory and available
+in our local user's `PATH`.
 
 As your local user run these commands:
 
@@ -204,16 +204,10 @@ please run the following command.
 mkdir -p ~/bin && source ~/.profile
 ```
 
-Now use `npm` to install the `yarn` packet manager.
+Then use `npm` to install `wetty`.
 
 ```bash
-npm install -g yarn --prefix ~/
-```
-
-Then use `yarn` to install `wetty`.
-
-```bash
-yarn global add wetty --prefix ~/
+npm -g i wetty --prefix ~/
 ```
 
 Once successfully installed the application should be available in your local
@@ -236,7 +230,7 @@ start up commands in the following section.
 echo https://$(curl -s4 icanhazip.com):3000
 ```
 
-_Please make make a note of this URL now._
+_Please make a note of this URL now._
 
 ## Running WeTTY
 
@@ -299,7 +293,7 @@ we generated earlier.
 `--ssh-host localhost` - optional setting telling WeTTY to connect the host
 `localhost`
 
-`--ssh-user $(whomai)` - defines our `ssh` username. In this case via the
+`--ssh-user $(whoami)` - defines our `ssh` username. In this case via the
 command substitution of `whoami` which will not require your input of a
 username.
 
@@ -439,7 +433,7 @@ Use `nano` to open a file for editing.
 nano ~/.config/systemd/user/wetty.service
 ```
 
-The copy and paste this code.
+Then copy and paste this code.
 
 **Note:** This is an example service file based on all the options documented
 and configured so far. You may not want all these option enabled so please
@@ -477,7 +471,7 @@ Use `nano` to open the file for editing.
 nano ~/.config/systemd/user/wetty.service
 ```
 
-The copy and paste this code.
+Then copy and paste this code.
 
 **Note:** This `ExecStart` assumes the location of your `config.json` to be
 `~/.config/wetty/config.json`. Please make sure you use the correct location for
@@ -490,7 +484,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c "$$(source /home/$$(whoami)/.nvm/nvm.sh && nvm which 14) /home/$$(whoami)/bin/wetty --conf /home/$$(whoami)/.config/wetty/config.json"
+ExecStart=/bin/bash -c "$$(source /home/$$(whoami)/.nvm/nvm.sh && nvm which 20) /home/$$(whoami)/bin/wetty --conf /home/$$(whoami)/.config/wetty/config.json"
 Restart=always
 RestartSec=2
 TimeoutStopSec=5
@@ -505,7 +499,7 @@ exit `nano`.
 
 ### Activating your service
 
-The you can enable and start your service.
+Then you can enable and start your service.
 
 ```bash
 systemctl --user enable --now wetty
@@ -553,7 +547,7 @@ configured `wetty` to run via `https` using our self signed ssl certificates. If
 you chose not to run WeTTY with a self signed certificate you should changes
 this to `http://127.0.0.1:3000/wetty;`
 
-The copy and paste this into the `https` server block of your enable server
+Then copy and paste this into the `https` server block of your enable server
 configuration file.
 
 ```nginx
@@ -649,16 +643,14 @@ behind either:
 
 ## Updating WeTTY
 
-With `yarn`:
-
 ```bash
-yarn global upgrade wetty --prefix ~/
+npm -g update wetty --prefix ~/
 ```
 
 To update or downgrade to a specific version you use this command:
 
 ```bash
-yarn global add wetty@2.0.2 --prefix ~/
+npm -g i wetty@2.7.0 --prefix ~/
 ```
 
 Now restart your `wetty` service.
@@ -682,5 +674,5 @@ source ~/.nvm/nvm.sh
 You can use the same command you used to install it with `nvm`
 
 ```bash
-nvm install 14
+nvm install 20
 ```
