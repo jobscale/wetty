@@ -16,7 +16,7 @@ ENV NODE_ENV=production
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo "deb http://ftp.debian.org/debian experimental main" | tee -a /etc/apt/sources.list
 RUN apt-get update \
- && apt-get install -y tzdata lsb-release curl git vim sudo openssh-server tmux
+ && apt-get install -y tzdata lsb-release curl git vim sudo openssh-server tmux \
  && apt-get -t experimental install -y libc6
 RUN rm -fr /var/lib/apt/lists/*
 RUN useradd -g users -G staff --shell $(which bash) --create-home bullseye \
