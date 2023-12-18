@@ -92,8 +92,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0(xterm@5.3.0)
       xterm-addon-web-links:
-        specifier: ^0.8.0
-        version: 0.8.0(xterm@5.3.0)
+        specifier: ^0.9.0
+        version: 0.9.0(xterm@5.3.0)
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
@@ -8029,6 +8029,14 @@ packages:
 
   /xterm-addon-web-links@0.8.0(xterm@5.3.0):
     resolution: {integrity: sha512-J4tKngmIu20ytX9SEJjAP3UGksah7iALqBtfTwT9ZnmFHVplCumYQsUJfKuS+JwMhjsjH61YXfndenLNvjRrEw==}
+    peerDependencies:
+      xterm: ^5.0.0
+    dependencies:
+      xterm: 5.3.0
+    dev: false
+
+  /xterm-addon-web-links@0.9.0(xterm@5.3.0):
+    resolution: {integrity: sha512-LIzi4jBbPlrKMZF3ihoyqayWyTXAwGfu4yprz1aK2p71e9UKXN6RRzVONR0L+Zd+Ik5tPVI9bwp9e8fDTQh49Q==}
     peerDependencies:
       xterm: ^5.0.0
     dependencies:
