@@ -6,8 +6,8 @@ name: Docker dind
 # documentation.
 
 on:
-  schedule:
-    - cron: '57 17 * * 1'
+  # schedule:
+  # - cron: '57 17 * * 1'
   push:
     branches: [ main ]
   pull_request:
