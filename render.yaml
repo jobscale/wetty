@@ -5,7 +5,7 @@ services:
   runtime: node
   plan: free
   region: oregon
-  repo: https://github.com/jobscale/todo-app
+  repo: https://github.com/jobscale/wetty.git
   branch: main
   buildCommand: npm i && npm run build
   startCommand: npm start
