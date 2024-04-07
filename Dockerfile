@@ -21,7 +21,7 @@ RUN apt-get update \
 RUN rm -fr /var/lib/apt/lists/*
 RUN useradd -g users -G staff --shell $(which bash) --create-home bookworm \
  && echo bookworm:bookworm | chpasswd \
- && echo "bookworm ALL=(ALL:ALL) /bin/vi" > /etc/sudoers.d/40-users
+ && echo "bookworm ALL=(ALL:ALL) /usr/sbin/visudo" > /etc/sudoers.d/40-users
 COPY --from=builder /home/node/build build
 COPY --from=builder /home/node/node_modules node_modules
 COPY docker-entrypoint.sh /usr/local/bin/
