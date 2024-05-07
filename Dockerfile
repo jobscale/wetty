@@ -16,9 +16,9 @@ ENV NODE_ENV=production
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo "deb http://ftp.debian.org/debian experimental main" | tee -a /etc/apt/sources.list
 RUN apt-get update \
- && apt-get install -y tzdata lsb-release curl git vim sudo openssh-server tmux \
- && apt-get -t experimental install -y libc6
-RUN rm -fr /var/lib/apt/lists/*
+ && apt-get install -y tzdata lsb-release curl git vim sudo tmux \
+ && apt-get -t experimental install -y libc6 \
+ && rm -fr /var/lib/apt/lists/*
 RUN useradd -g users -G staff --shell $(which bash) --create-home bookworm \
  && echo bookworm:bookworm | chpasswd \
  && echo "bookworm ALL=(ALL:ALL) /usr/sbin/visudo" > /etc/sudoers.d/40-users
