@@ -1,10 +1,12 @@
 FROM node:lts-bookworm as builder
 WORKDIR /home/node
 COPY --chown=node:staff . .
+RUN npm i -g husky
 USER node
 RUN npm version
 RUN rm -fr node_modules package-lock.json yarn.lock \
  && npm i --legacy-peer-deps
+RUN npm i sass-embedded pnpm
 RUN npm run build
 RUN rm -fr node_modules package-lock.json yarn.lock \
  && npm i --omit=dev --legacy-peer-deps
@@ -17,7 +19,9 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN echo "deb http://ftp.debian.org/debian experimental main" | tee -a /etc/apt/sources.list
 RUN apt-get update \
  && apt-get install -y tzdata lsb-release curl git vim sudo tmux \
- && apt-get -t experimental install -y libc6 \
+ && rm -fr /var/lib/apt/lists/*
+RUN apt-get update \
+ && apt-get install -y libc6 \
  && rm -fr /var/lib/apt/lists/*
 RUN useradd -g users -G staff --shell $(which bash) --create-home bookworm \
  && echo bookworm:bookworm | chpasswd \
