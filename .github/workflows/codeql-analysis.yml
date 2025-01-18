@@ -2,7 +2,7 @@
 name: Code Scanning - Action
 on:
   # schedule:
-  # - cron: '30 17 * * 1'
+  # - cron: '29 17 * * 1'
   push:
     branches: [main]
   pull_request:
