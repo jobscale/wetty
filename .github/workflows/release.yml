@@ -2,7 +2,7 @@
 name: Create Release
 on:
   # schedule:
-  # - cron: '29 17 * * 1'
+  # - cron: '28 17 * * 1'
   push:
     tags:
       - 'v*.*.*'
