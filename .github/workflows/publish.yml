@@ -2,7 +2,7 @@
 name: Build and Publish
 on:
   # schedule:
-  # - cron: '16 17 * * 1'
+  # - cron: '15 17 * * 1'
   push:
     branches:
       - main
