@@ -1,5 +1,7 @@
 ---
 name: Code Scanning - Action
+# The workflow was triggered 2 times via automatically.
+
 on:
   # schedule:
   # - cron: '12 17 * * 1'
