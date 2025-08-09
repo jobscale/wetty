@@ -15,7 +15,7 @@ FROM node:lts-bookworm-slim
 SHELL ["bash", "-c"]
 WORKDIR /home/node
 ENV NODE_ENV=production
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 RUN echo "deb http://ftp.debian.org/debian experimental main" | tee -a /etc/apt/sources.list
 RUN apt-get update \
  && apt-get install -y --no-install-recommends tzdata lsb-release curl git vim sudo tmux \
