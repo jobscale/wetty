@@ -18,10 +18,8 @@ ENV NODE_ENV=production
 ENV DEBIAN_FRONTEND=noninteractive
 RUN echo "deb http://ftp.debian.org/debian experimental main" | tee -a /etc/apt/sources.list
 RUN apt-get update \
- && apt-get install -y --no-install-recommends tzdata lsb-release curl git vim sudo tmux \
- && apt-get clean && rm -fr /var/lib/apt/lists/*
-RUN apt-get update \
- && apt-get install -y --no-install-recommends libc6 \
+ && apt-get install -y --no-install-recommends \
+  ca-certificates tzdata lsb-release curl git vim sudo tmux libc6 \
  && apt-get clean && rm -fr /var/lib/apt/lists/*
 RUN useradd -g users -G staff --shell $(which bash) --create-home bookworm \
  && echo bookworm:bookworm | chpasswd \
