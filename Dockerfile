@@ -1,5 +1,6 @@
 FROM node:lts-trixie as builder
 WORKDIR /home/node
+RUN apt-get update && apt-get install -y python3-distutils
 COPY --chown=node:staff . .
 RUN npm i -g husky
 USER node
