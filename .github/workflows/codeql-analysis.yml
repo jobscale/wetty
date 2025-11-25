@@ -1,10 +1,6 @@
 ---
 name: Code Scanning - Action
-# The workflow was triggered 198 times via automatically.
-
 on:
-  # schedule:
-  # - cron: '12 17 * * 1'
   push:
     branches: [main]
   pull_request:
